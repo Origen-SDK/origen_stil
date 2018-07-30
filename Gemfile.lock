@@ -2,7 +2,9 @@ PATH
   remote: .
   specs:
     origen_stil (0.1.0)
+      ast (~> 2)
       origen (>= 0.33.3)
+      treetop
 
 GEM
   remote: https://rubygems.org/
@@ -93,6 +95,7 @@ GEM
       origen
     parser (2.5.1.2)
       ast (~> 2.4.0)
+    polyglot (0.3.5)
     powerpack (0.1.2)
     pry (0.11.3)
       coderay (~> 1.1.0)
@@ -142,6 +145,8 @@ GEM
     thread_safe (0.3.6)
     tilt (2.0.8)
     tins (1.16.3)
+    treetop (1.6.10)
+      polyglot (~> 0.3)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
     yard (0.9.15)

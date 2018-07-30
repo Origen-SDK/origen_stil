@@ -1,0 +1,70 @@
+module OrigenSTIL
+  module Syntax
+    grammar Grammar
+
+      rule stil_source
+        stil_source_items+ {
+          def to_ast
+            n :stil_source, *elements_to_ast
+          end
+        }
+      end
+
+      rule stil_source_items
+        S / N / block_comment / one_line_comment / stil_version
+      end
+
+      rule stil_version
+        s "STIL" S major:([0-9]) "." minor:([0-9]) s ";" {
+          def to_ast
+            n :version, major.text_value.to_i, minor.text_value.to_i
+          end
+        }
+      end
+
+      #############################################################################
+      # Comments and Whitespace
+      #############################################################################
+
+      rule comment
+        one_line_comment / block_comment
+      end
+
+      rule block_comment
+        "/*" (!end_of_comment .)* end_of_comment
+      end
+
+      rule end_of_comment
+        "*."
+      end
+
+      rule one_line_comment
+        "//" (!N .)*
+      end
+
+      rule space
+        " " / "\t"
+      end
+
+      # Optional space, including newlines and comments
+      rule s
+        (space / N / one_line_comment / block_comment)*
+      end
+
+      # Required space, including newlines and comments
+      rule S
+        (space / N / one_line_comment / block_comment)+
+      end
+
+      # Optional end of line
+      rule n
+        "\r"? "\n"?
+      end
+
+      # Required end of line
+      rule N
+        "\r"? "\n"
+      end
+    end
+  end
+end

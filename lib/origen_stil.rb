@@ -16,7 +16,12 @@ module OrigenSTIL
   # Note that there is no problem from requiring a file twice (Ruby will ignore
   # the second require), so if you have a file that must be required first, then
   # explicitly require it up above and then let this take care of the rest.
-  Dir.glob("#{File.dirname(__FILE__)}/origen_stil/**/*.rb").sort.each do |file|
-    require file
+  module Syntax
+    autoload :Node, 'origen_stil/syntax/node'
+    autoload :Parser, 'origen_stil/syntax/parser'
+  end
+
+  def self.parse_file(path, options = {})
+    Syntax::Parser.parse_file(path, options)
   end
 end

@@ -24,10 +24,15 @@ require "rspec/legacy_formatters"
 require "#{Origen.top}/spec/format/origen_formatter"
 require "byebug"
 require 'pry'
+require 'origen_stil'
 
 def load_target(target="default")
   Origen.target.switch_to target
   Origen.target.load!
+end
+
+def s(type, *children)
+  OrigenSTIL::Syntax::Node.new(type, children)
 end
 
 RSpec.configure do |config|
