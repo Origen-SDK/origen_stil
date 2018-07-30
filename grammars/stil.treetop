@@ -11,15 +11,182 @@ module OrigenSTIL
       end
 
       rule stil_source_items
-        S / N / block_comment / one_line_comment / stil_version
+        S / N / block_comment / one_line_comment / stil_version / header_block / signals_block
       end
 
       rule stil_version
-        s "STIL" S major:([0-9]) "." minor:([0-9]) s ";" {
+        "STIL" S major:([0-9]) "." minor:([0-9]) s ";" {
           def to_ast
             n :version, major.text_value.to_i, minor.text_value.to_i
           end
         }
+      end
+
+      ############################################################################
+      # Header Block
+      ############################################################################
+
+      rule header_block
+        "Header" s "{" s title? s date? s source? s history? s "}" {
+          def to_ast
+            n :header, *elements_to_ast
+          end
+        }
+      end
+
+      rule title
+        "Title" S '"' value:(!'"' .)* '"' s ";" {
+          def to_ast
+            n :title, value.text_value
+          end
+        }
+      end
+
+      rule date
+        "Date" S '"' value:(!'"' .)* '"' s ";" {
+          def to_ast
+            n :date, value.text_value
+          end
+        }
+      end
+
+      rule source
+        "Source" S '"' value:(!'"' .)* '"' s ";" {
+          def to_ast
+            n :date, value.text_value
+          end
+        }
+      end
+
+      rule history
+        "History" s "{" (s annotation)* s "}" {
+          def to_ast
+            n :history, *elements_to_ast
+          end
+        } 
+      end
+
+      rule annotation
+        "Ann" s "{*" value:(!"*}" .)* s "*}" {
+          def to_ast
+            n :annotation, value.text_value
+          end
+        }
+      end
+
+      ############################################################################
+      # Signals Block
+      ############################################################################
+
+      rule signals_block
+        "Signals" s "{" (s signal)* s "}" {
+          def to_ast
+            n :signals, *elements_to_ast
+          end
+        }
+      end
+
+      rule signal
+        signame:name S type:("In" / "Out" / "InOut" / "Supply" / "Pseudo") s ";" {
+          def to_ast
+            n :signal, signame.text_value, type.text_value
+          end
+        }
+      end
+
+      ############################################################################
+      # Identifiers
+      ############################################################################
+        
+      rule name
+        name_segment / (name_segment ".")+ name_segment
+      end
+
+      rule name_segment
+        simple_identifier / escaped_identifier
+      end
+
+      rule simple_identifier
+        letter_or_underline simple_characters
+      end
+
+      rule simple_characters
+        simple_character+
+      end
+
+      rule letter_or_underline
+        letter / underline
+      end
+
+      rule simple_character
+        letter / digit / underline
+      end
+
+      rule letter
+        upper_case_letter / lower_case_letter
+      end
+
+      rule upper_case_letter
+        [A-Z]
+      end
+
+      rule lower_case_letter
+        [a-z]
+      end
+
+      rule underline
+        "_"
+      end
+
+      rule escaped_identifier
+        '"' escaped_characters '"'
+      end
+
+      rule escaped_characters
+        escaped_character+
+      end
+
+      rule escaped_character
+        simple_character / special_character / whitespace_character
+      end
+
+      rule special_character
+        "!" / "@" / "#" / "$" / "%" / "^" / "&" / "*" / "(" / ")" / "-" / "+" /
+        "+" / "|" / "`" / "~" / "{" / "[" / "}" / "]" / ":" / ";" / "'" / "," /
+        "<" / "." / ">" / "/" / "?" / "\\"
+      end
+
+      rule whitespace_character
+        " " / "\t" / "\n"
+      end
+
+      #############################################################################
+      # Numbers
+      #############################################################################
+
+      rule digit
+        [0-9]
+      end
+
+      rule hexdigit
+        [a-f] / [A-F]
+      end
+
+      rule hex_number
+        hexdigit+
+      end
+
+      rule integer
+        digit+
+      end
+
+      rule signed_integer
+        integer / "-" integer
+      end
+
+      rule number
+        signed_integer / signed_integer "." integer / signed_integer "e" signed_integer /
+        signed_integer "." integer "e" signed_integer
       end
 
       #############################################################################
@@ -35,7 +202,7 @@ module OrigenSTIL
       end
 
       rule end_of_comment
-        "*."
+        "*/"
       end
 
       rule one_line_comment
