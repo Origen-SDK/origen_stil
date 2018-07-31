@@ -11,10 +11,8 @@ module OrigenSTIL
       end
 
       def self.parse_file(path, options = {})
-        unless File.exist?(path)
-          fail "STIL source file not found: #{path}"
-        end
-        parse(File.read(path), options.merge(file: path))
+        stil = OrigenSTIL::File.new(path)
+        parse(stil.frontmatter, options.merge(file: stil.path))
       end
 
       def self.parse(data, options = {})

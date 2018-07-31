@@ -12,7 +12,7 @@ module OrigenSTIL
 
       rule stil_source_items
         S / N / block_comment / one_line_comment / stil_version / header_block / signals_block /
-        signal_groups_block / timing_block
+        signal_groups_block / timing_block / pattern_exec_block / pattern_burst_block
       end
 
       rule stil_version
@@ -21,6 +21,102 @@ module OrigenSTIL
             n :version, major.text_value.to_i, minor.text_value.to_i
           end
         }
+      end
+
+      ############################################################################
+      # 6.13 and 6.14. Timing and Signal Expressions
+      ############################################################################
+
+      rule sigref_expr
+        (simple_name:name / "'" s sigref_expression s "'") {
+          def to_ast
+            n :sigref_expr, *elements_to_ast
+          end
+        }
+      end
+
+      rule expression
+        sigref_expression / time_expression
+      end
+
+      rule sigref_expression
+        (add / subtract / name / paren_expression)+
+      end
+
+      rule time_expression
+        (add / subtract / multiply / divide / number_with_unit / number / name / paren_expression)+
+      end
+
+      rule terminal
+        number_with_unit / number / name / paren_expression
+      end
+
+      rule add
+        terminal s "+" s expression {
+          def to_ast
+            n :add, *elements_to_ast
+          end
+        }
+      end
+
+      rule subtract
+        terminal s "-" s expression {
+          def to_ast
+            n :subtract, *elements_to_ast
+          end
+        }
+      end
+
+      rule multiply
+        terminal s "*" s expression {
+          def to_ast
+            n :multiply, *elements_to_ast
+          end
+        }
+      end
+
+      rule divide
+        terminal s "/" s expression {
+          def to_ast
+            n :divide, *elements_to_ast
+          end
+        }
+      end
+
+      rule paren_expression
+        "(" s expression s ")" {
+          def to_ast
+            n :parens, *elements_to_ast
+          end
+        }
+      end
+
+      rule time_expr
+        "'" s time_expression s "'" {
+          def to_ast
+            n :time_expr, *elements_to_ast
+          end
+        }
+      end
+
+      rule number_with_unit
+        value:(number+) prefix:engineering_prefix? units:si_unit {
+          def to_ast
+            children = []
+            children << n(:value, value.text_value.to_i)
+            children << n(:prefix, prefix.text_value) if respond_to?(:prefix)
+            children << n(:units, units.text_value)
+            n :number_with_unit, *children
+          end
+        }
+      end
+
+      rule si_unit
+        "A" / "Cel" / "F" / "H" / "Hz" / "m" / "Ohm" / "s" / "W" / "V"
+      end
+
+      rule engineering_prefix
+        "E" / "P" / "T" / "G" / "M" / "k" / "m" / "u" / "n" / "p" / "f" / "a"
       end
 
       ############################################################################
@@ -180,99 +276,141 @@ module OrigenSTIL
       end
 
       ############################################################################
-      # 6.13 and 6.14. Timing and Signal Expressions
+      # 16. PatternExec Block
       ############################################################################
 
-      rule sigref_expr
-        (simple_name:name / "'" s sigref_expression s "'") {
+      rule pattern_exec_block
+        "PatternExec" S name? s "{" (s category)* (s selector)* (s timing)? (s pattern_burst)? s "}" {
           def to_ast
-            n :sigref_expr, *elements_to_ast
+            n :pattern_exec, *elements_to_ast
           end
         }
       end
 
-      rule expression
-        sigref_expression / time_expression
-      end
-
-      rule sigref_expression
-        (add / subtract / name / paren_expression)+
-      end
-
-      rule time_expression
-        (add / subtract / multiply / divide / number_with_unit / number / name / paren_expression)+
-      end
-
-      rule terminal
-        number_with_unit / number / name / paren_expression
-      end
-
-      rule add
-        terminal s "+" s expression {
+      rule category
+        "Category" S nm:name s ";" {
           def to_ast
-            n :add, *elements_to_ast
+            n :category, nm.text_value
           end
         }
       end
 
-      rule subtract
-        terminal s "-" s expression {
+      rule selector
+        "Selector" S nm:name s ";" {
           def to_ast
-            n :subtract, *elements_to_ast
+            n :selector, nm.text_value
           end
         }
       end
 
-      rule multiply
-        terminal s "*" s expression {
+      rule timing
+        "Timing" S nm:name s ";" {
           def to_ast
-            n :multiply, *elements_to_ast
+            n :timing, nm.text_value
           end
         }
       end
 
-      rule divide
-        terminal s "/" s expression {
+      rule pattern_burst
+        "PatternBurst" S nm:name s ";" {
           def to_ast
-            n :divide, *elements_to_ast
+            n :pattern_burst, nm.text_value
           end
         }
       end
 
-      rule paren_expression
-        "(" s expression s ")" {
+      ############################################################################
+      # 17. PatternBurst Block
+      ############################################################################
+
+      rule pattern_burst_block
+        "PatternBurst" S name s "{" (s signal_groups)* (s macro_defs)* (s procedures)? (s scan_structures)? (s start)?
+                                    (s stop)? (s termination_block)* (s pat_list)+ s "}" {
           def to_ast
-            n :parens, *elements_to_ast
+            n :pattern_burst, *elements_to_ast
           end
         }
       end
 
-      rule time_expr
-        "'" s time_expression s "'" {
+      rule signal_groups
+        "SignalGroups" S nm:name s ";" {
           def to_ast
-            n :time_expr, *elements_to_ast
+            n :signal_groups, nm.text_value
           end
         }
       end
 
-      rule number_with_unit
-        value:(number+) prefix:engineering_prefix? units:si_unit {
+      rule macro_defs
+        "MacroDefs" S nm:name s ";" {
           def to_ast
-            children = []
-            children << n(:value, value.text_value.to_i)
-            children << n(:prefix, prefix.text_value) if respond_to?(:prefix)
-            children << n(:units, units.text_value)
-            n :number_with_unit, *children
+            n :macro_defs, nm.text_value
           end
         }
       end
 
-      rule si_unit
-        "A" / "Cel" / "F" / "H" / "Hz" / "m" / "Ohm" / "s" / "W" / "V"
+      rule procedures
+        "Procedures" S nm:name s ";" {
+          def to_ast
+            n :procedures, nm.text_value
+          end
+        }
       end
 
-      rule engineering_prefix
-        "E" / "P" / "T" / "G" / "M" / "k" / "m" / "u" / "n" / "p" / "f" / "a"
+      rule scan_structures
+        "ScanStructures" S nm:name s ";" {
+          def to_ast
+            n :scan_structures, nm.text_value
+          end
+        }
+      end
+
+      rule start
+        "Start" S nm:name s ";" {
+          def to_ast
+            n :start, nm.text_value
+          end
+        }
+      end
+
+      rule stop
+        "Stop" S nm:name s ";" {
+          def to_ast
+            n :stop, nm.text_value
+          end
+        }
+      end
+
+      rule termination_block
+        "Termination" s "{" (s termination_item)* s "}" {
+          def to_ast
+            n :termination_block, *elements_to_ast
+          end
+        }
+      end
+
+      rule termination_item
+        exp:sigref_expr S value:("TerminateHigh" / "TerminateLow" / "TerminateOff" / "TerminateUknown") s ";" {
+          def to_ast
+            n :termination_item, exp.to_ast, value.text_value
+          end
+        }
+      end
+
+      rule pat_list
+        "PatList" s "{" (s pat_list_item)* s "}" {
+          def to_ast
+            n :pat_list, *elements_to_ast
+          end
+        }
+      end
+
+      rule pat_list_item
+        (nm:name s (";" / attrs:("{" (s signal_groups)* (s macro_defs)* (s procedures)? (s scan_structures)? (s start)?
+                                     (s stop)? (s termination_block)* s "}"))) {
+          def to_ast
+            n :pat_list_item, *elements_to_ast
+          end
+        }
       end
 
       ############################################################################
