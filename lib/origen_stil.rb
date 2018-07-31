@@ -25,3 +25,5 @@ module OrigenSTIL
     Syntax::Parser.parse_file(path, options)
   end
 end
+
+STIL = OrigenSTIL unless defined?(STIL)

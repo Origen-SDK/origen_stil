@@ -35,7 +35,7 @@ module OrigenSTIL
           @last_error_msg << "#{'~' * (parser.failure_column - 1)}^"
           Origen.log.error "Failed parsing STIL file: #{file}"
           @last_error_msg.each do |line|
-            Origen.log.error line.strip
+            Origen.log.error line.rstrip
           end
         end
         if tree

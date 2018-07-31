@@ -10,6 +10,7 @@ describe 'The STIL parser' do
     ast.find(:header).find(:title).value.should == "Hello World"
     ast.find(:header).find(:history).find_all(:annotation).size.should == 2
     ast.find(:signals).find_all(:signal).size.should == 18
+    debugger
   end
 
 end

@@ -27,3 +27,36 @@ SignalGroups {
   bbus_odd = 'bbus_pins-B0-B2-B3-B4';
   xbus = 'DIR+OE_' { Base Hex wW; Alignment LSB; }
 }
+
+// Example of a SignalGroups block for domain "quality"
+SignalGroups quality {
+  abus_pins = 'A0+A1+A2+A3';
+}
+
+Timing {
+  WaveformTable defaults {
+    Waveforms {
+      allpins { xX { TMARK: 't_anchor' Z; } }
+    }
+  }
+  WaveformTable wft1 {
+    Period 'tper' ;
+    InheritWaveformTable defaults;
+    Waveforms {
+      A7M { xX { 'TMARK+tx' Z; } }
+      A7  { xX { 'TMARK+tx' Z; } }
+      DIR { 01 { 'TMARK+tic1' D/U; } }
+    }
+  }
+  WaveformTable misc {
+    Waveforms {
+      some_pins {
+        InheritWaveform wft1.blah;
+        xy { '0ns' D; '10ns' D/U; }
+      }
+      some_more_pins {
+        ab { InheritWaveform wft1.bbus_aliases.1h; }
+      }
+    }
+  }
+}
