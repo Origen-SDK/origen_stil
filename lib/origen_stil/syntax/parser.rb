@@ -11,7 +11,7 @@ module OrigenSTIL
       end
 
       def self.parse_file(path, options = {})
-        stil = OrigenSTIL::File.new(path)
+        stil = OrigenSTIL::Pattern.new(path)
         parse(stil.frontmatter, options.merge(file: stil.path))
       end
 

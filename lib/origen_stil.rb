@@ -21,7 +21,7 @@ module OrigenSTIL
     autoload :Parser, 'origen_stil/syntax/parser'
   end
 
-  autoload :File, 'origen_stil/file'
+  autoload :Pattern, 'origen_stil/pattern'
 
   def self.parse_file(path, options = {})
     Syntax::Parser.parse_file(path, options)

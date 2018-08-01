@@ -1,10 +1,10 @@
 module OrigenSTIL
-  class File
+  class Pattern
     # Path to the STIL file on disk
     attr_reader :path
 
     def initialize(path, options = {})
-      unless ::File.exist?(path)
+      unless File.exist?(path)
         fail "STIL source file not found: #{path}"
       end
       @path = path
@@ -15,7 +15,7 @@ module OrigenSTIL
     def frontmatter
       @frontmatter ||= begin
         fm = ''
-        ::File.foreach(path) do |line|
+        File.foreach(path) do |line|
           break if line =~ /^\s*Pattern /
           fm << line
         end
@@ -28,31 +28,36 @@ module OrigenSTIL
     #
     #     { timeset: "wave1",
     #       comments: ["blah, blah", "blah blah blah"],
-    #       pindata: { "ALL" => "10011011101" }
+    #       pindata: { "ALL" => "10011011101" },
+    #       repeat: 1,
     #     }
     #
     #     { timeset: nil,
     #       comments: [],
-    #       pindata: { "portA" => "10011011101", "portB" => "10010" }
+    #       pindata: { "portA" => "10011011101", "portB" => "10010" },
+    #       repeat: 1000
     #     }
     #
     def each_vector(pattern_name, options = {})
       open = false
-      vector = { timeset: nil, comments: [], pindata: {} }
-      ::File.foreach(path) do |line|
+      vector = { timeset: nil, comments: [], pindata: {}, repeat: 1 }
+      File.foreach(path) do |line|
         if open
-          break if line =~ /^\s*(}|Pattern )/
+          # Stop at next pattern or EOF
+          break if line =~ /^\s*Pattern/
           if line =~ /^\s*Ann\s*{\*\s*(.*)\s*\*}/
             vector[:comments] << Regexp.last_match(1)
-          elsif line =~ /^\s*W\s+(.*)\s*;/
+          elsif line =~ /(?:^|.*:)\s*(?:W|WaveformTable)\s+(.*)\s*;/
             vector[:timeset] = Regexp.last_match(1)
-          elsif line =~ /^\s*V\s+{(.*)}/
+          elsif line =~ /(?:^|.*:)\s*Loop\s+(\d+)(\s|{)/
+            vector[:repeat] = Regexp.last_match(1).to_i
+          elsif line =~ /(?:^|.*:)\s*(?:V|Vector)\s+{(.*)}/
             Regexp.last_match(1).strip.split(';').each do |assignment|
               assignment = assignment.split(/\s*=\s*/)
               vector[:pindata][assignment[0]] = assignment[1]
             end
             yield vector
-            vector = { timeset: nil, comments: [], pindata: {} }
+            vector = { timeset: nil, comments: [], pindata: {}, repeat: 1 }
           end
         else
           open = true if line =~ /^\s*Pattern #{pattern_name}\s*{/
