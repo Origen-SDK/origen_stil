@@ -2446,11 +2446,11 @@ module OrigenSTIL
           s1 << r3
           if r3
             i4 = index
-            if (match_len = has_terminal?("In", false, index))
+            if (match_len = has_terminal?("InOut", false, index))
               r5 = instantiate_node(SyntaxNode,input, index...(index + match_len))
               @index += match_len
             else
-              terminal_parse_failure('"In"')
+              terminal_parse_failure('"InOut"')
               r5 = nil
             end
             if r5
@@ -2468,11 +2468,11 @@ module OrigenSTIL
                 r6 = SyntaxNode.new(input, (index-1)...index) if r6 == true
                 r4 = r6
               else
-                if (match_len = has_terminal?("InOut", false, index))
+                if (match_len = has_terminal?("In", false, index))
                   r7 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                   @index += match_len
                 else
-                  terminal_parse_failure('"InOut"')
+                  terminal_parse_failure('"In"')
                   r7 = nil
                 end
                 if r7
@@ -2546,11 +2546,11 @@ module OrigenSTIL
             s12 << r14
             if r14
               i15 = index
-              if (match_len = has_terminal?("In", false, index))
+              if (match_len = has_terminal?("InOut", false, index))
                 r16 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                 @index += match_len
               else
-                terminal_parse_failure('"In"')
+                terminal_parse_failure('"InOut"')
                 r16 = nil
               end
               if r16
@@ -2568,11 +2568,11 @@ module OrigenSTIL
                   r17 = SyntaxNode.new(input, (index-1)...index) if r17 == true
                   r15 = r17
                 else
-                  if (match_len = has_terminal?("InOut", false, index))
+                  if (match_len = has_terminal?("In", false, index))
                     r18 = instantiate_node(SyntaxNode,input, index...(index + match_len))
                     @index += match_len
                   else
-                    terminal_parse_failure('"InOut"')
+                    terminal_parse_failure('"In"')
                     r18 = nil
                   end
                   if r18

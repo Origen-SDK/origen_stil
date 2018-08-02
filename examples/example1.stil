@@ -86,7 +86,7 @@ Pattern blah {
     Ann {* blah blah 1 *} 
     W wft1;
     V { ALL = 0110110110110110110111011; }
-    // Test of loops containing 1 vector will be interpretted as a repeat
+    // Test that loops containing 1 vector will be interpreted as a repeat
     Loop 10 {
       V { ALL = 0110110110110110110111011; }
     }

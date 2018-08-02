@@ -10,6 +10,12 @@ module OrigenSTIL
       @path = path
     end
 
+    # Returns frontmatter as an AST, note that this does not contain any
+    # vector-level information from Pattern blocks at the end of the file
+    def ast
+      @ast ||= Syntax::Parser.parse_file(path)
+    end
+
     # Returns the contents of the file before the first Pattern block
     # as a string
     def frontmatter
@@ -21,6 +27,21 @@ module OrigenSTIL
         end
         fm
       end
+    end
+
+    # Add the pins defined in the STIL file to the DUT, unless it has them already.
+    # This will also call the add_pin_groups method automatically unless option
+    # :pin_group is set to false
+    def add_pins(options = {})
+      options = {
+        pin_groups: true
+      }.merge(options)
+      Processor::Pins.new.run(ast, dut, options)
+      add_pin_groups(options) unless options[:pin_groups] = false
+    end
+
+    def add_pin_groups(options = {})
+      Processor::PinGroups.new.run(ast, dut, options)
     end
 
     # Yields each vector in the given pattern to the caller as a Hash with the

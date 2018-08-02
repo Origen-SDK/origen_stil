@@ -17,14 +17,31 @@ module OrigenSTIL
   # the second require), so if you have a file that must be required first, then
   # explicitly require it up above and then let this take care of the rest.
   module Syntax
-    autoload :Node, 'origen_stil/syntax/node'
+    autoload :Node,   'origen_stil/syntax/node'
     autoload :Parser, 'origen_stil/syntax/parser'
+  end
+
+  module Processor
+    autoload :Base,      'origen_stil/processor/base'
+    autoload :Pins,      'origen_stil/processor/pins'
+    autoload :PinGroups, 'origen_stil/processor/pin_groups'
   end
 
   autoload :Pattern, 'origen_stil/pattern'
 
-  def self.parse_file(path, options = {})
-    Syntax::Parser.parse_file(path, options)
+  def self.add_pins(path, options = {})
+    pattern(path).add_pins(options)
+  end
+
+  # Returns an OrigenSTIL::Pattern instance for the given STIL file
+  def self.pattern(path_to_stil_file)
+    path = Pathname.new(path_to_stil_file).realpath.cleanpath.to_s
+    patterns[path] ||= OrigenSTIL::Pattern.new(path)
+  end
+
+  # @api private
+  def self.patterns
+    @patterns ||= {}
   end
 end
 

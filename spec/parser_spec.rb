@@ -4,7 +4,7 @@ describe 'The STIL parser' do
 
   it 'can parse example 1' do
     f = "#{Origen.root}/examples/example1.stil"
-    ast = OrigenSTIL.parse_file(f)
+    ast = OrigenSTIL::Pattern.new(f).ast
     ast.should be
     ast.find(:version).should == s(:version, 1, 0)
     ast.find(:header).find(:title).value.should == "Hello World"

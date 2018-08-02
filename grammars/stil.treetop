@@ -184,8 +184,8 @@ module OrigenSTIL
       end
 
       rule signal
-        (signame:name S type:("In" / "Out" / "InOut" / "Supply" / "Pseudo") s ";" /
-         signame:name S type:("In" / "Out" / "InOut" / "Supply" / "Pseudo") s
+        (signame:name S type:("InOut" / "Out" / "In" / "Supply" / "Pseudo") s ";" /
+         signame:name S type:("InOut" / "Out" / "In" / "Supply" / "Pseudo") s
            properties:("{" s termination? s default_state? s base? s alignment? s scan_in? s scan_out? s data_bit_count? s "}" )) {
           def to_ast
             n :signal, signame.text_value, type.text_value
