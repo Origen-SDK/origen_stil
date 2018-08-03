@@ -10,6 +10,20 @@ module OrigenSTIL
       @path = path
     end
 
+    def execute(options = {})
+      Processor::Pattern.new.run(ast) do |pattern_name|
+        each_vector(pattern_name) do |vector|
+          vector[:comments].each { |comment| cc comment }
+          vector[:pindata].each do |pin, data|
+            pin = dut.pins(pin)
+            data = data.gsub(/\s+/, '')
+            pin.vector_formatted_value = data
+          end
+          vector[:repeat].cycles
+        end
+      end
+    end
+
     # Returns frontmatter as an AST, note that this does not contain any
     # vector-level information from Pattern blocks at the end of the file
     def ast

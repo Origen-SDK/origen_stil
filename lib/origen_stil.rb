@@ -25,10 +25,24 @@ module OrigenSTIL
     autoload :Base,      'origen_stil/processor/base'
     autoload :Pins,      'origen_stil/processor/pins'
     autoload :PinGroups, 'origen_stil/processor/pin_groups'
+    autoload :Pattern,   'origen_stil/processor/pattern'
   end
 
   autoload :Pattern, 'origen_stil/pattern'
 
+  # Execute the pattern vectors in the given STIL file, this will also call
+  # add_pins to ensure the pins are available so there is no need to call that
+  # separately
+  def self.execute(path, options = {})
+    # Bit of a hack, this is to lock in the current set of pins so that any added
+    # by the STIL are not included, the Origen model is in charge of pattern formatting
+    tester.current_pin_vals if tester
+    add_pins(path, options)
+    pattern(path).execute(options)
+  end
+
+  # Add pins (and pin groups) from the given STIL file to the current DUT
+  # unless they already exist
   def self.add_pins(path, options = {})
     pattern(path).add_pins(options)
   end
