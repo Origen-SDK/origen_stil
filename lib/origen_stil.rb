@@ -26,6 +26,7 @@ module OrigenSTIL
     autoload :Pins,      'origen_stil/processor/pins'
     autoload :PinGroups, 'origen_stil/processor/pin_groups'
     autoload :Pattern,   'origen_stil/processor/pattern'
+    autoload :Timesets,  'origen_stil/processor/timesets'
   end
 
   autoload :Pattern, 'origen_stil/pattern'
@@ -34,6 +35,11 @@ module OrigenSTIL
   # add_pins to ensure the pins are available so there is no need to call that
   # separately
   def self.execute(path, options = {})
+    options = {
+      # When true, any timeset changes from the STIL will be translated to tester.set_timeset
+      # calls, otherwise they will be ignored
+      set_timesets: false
+    }.merge(options)
     # Bit of a hack, this is to lock in the current set of pins so that any added
     # by the STIL are not included, the Origen model is in charge of pattern formatting
     tester.current_pin_vals if tester

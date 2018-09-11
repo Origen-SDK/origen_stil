@@ -11,8 +11,13 @@ module OrigenSTIL
     end
 
     def execute(options = {})
+      timeset = nil
       Processor::Pattern.new.run(ast) do |pattern_name|
-        each_vector(pattern_name) do |vector|
+        each_vector(pattern_name, options) do |vector|
+          if options[:set_timesets] && vector[:timeset] && vector[:timeset] != timeset
+            tester.set_timeset(vector[:timeset], timesets[vector[:timeset]][:period] || 0)
+            timeset = vector[:timeset]
+          end
           vector[:comments].each { |comment| cc comment }
           vector[:pindata].each do |pin, data|
             pin = dut.pins(pin)
@@ -56,6 +61,12 @@ module OrigenSTIL
 
     def add_pin_groups(options = {})
       Processor::PinGroups.new.run(ast, dut, options)
+    end
+
+    # Returns a hash containing all timesets (WaveformTables) defined in the STIL file
+    #   { 'Waveset1' => { period_in_ns: 1000 } }
+    def timesets(options = {})
+      @timesets ||= Processor::Timesets.new.run(ast, options)
     end
 
     # Yields each vector in the given pattern to the caller as a Hash with the
