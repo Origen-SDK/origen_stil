@@ -11,7 +11,7 @@ class OrigenSTILApplication < Origen::Application
   config.name     = "origen_stil"
   config.initials = "OrigenSTIL"
   # Change this to point to the revision control repository for this plugin
-  #config.rc_url   = "ssh://git@github.com:myaccount/origen_stil.git" 
+  config.rc_url   = "https://github.com/Origen-SDK/origen_stil.git"
   config.release_externally = true
 
   # To enable deployment of your documentation to a web server (via the 'origen web'
