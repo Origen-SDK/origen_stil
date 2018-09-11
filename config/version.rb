@@ -1,6 +1,6 @@
 module OrigenSTIL
   MAJOR = 0
-  MINOR = 1
+  MINOR = 2
   BUGFIX = 0
   DEV = nil
 
