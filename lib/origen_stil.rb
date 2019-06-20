@@ -63,6 +63,11 @@ module OrigenSTIL
   def self.patterns
     @patterns ||= {}
   end
+
+  # @api private
+  def self.unquote(str)
+    str.gsub(/\A("|')|("|')\Z/, '')
+  end
 end
 
 STIL = OrigenSTIL unless defined?(STIL)

@@ -13,6 +13,7 @@ module OrigenSTIL
 
       def on_signal_group(node)
         name, expr = *node
+        name = OrigenSTIL.unquote(name)
         unless model.has_pin?(name)
           ids = process(expr).to_a[0]
           model.add_pin_group name.to_sym, *ids
