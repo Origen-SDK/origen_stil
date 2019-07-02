@@ -11,6 +11,7 @@ module OrigenSTIL
 
       def on_signal(node)
         name, direction = *node
+        name = OrigenSTIL.unquote(name)
         if direction == 'In'
           direction = :input
         elsif direction == 'Out'
@@ -35,6 +36,12 @@ module OrigenSTIL
             end
           end
         end
+      end
+
+      private
+
+      def unquote(str)
+        str.gsub(/\A("|')|("|')\Z/, '')
       end
     end
   end

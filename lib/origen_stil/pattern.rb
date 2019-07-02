@@ -94,19 +94,19 @@ module OrigenSTIL
           if line =~ /^\s*Ann\s*{\*\s*(.*)\s*\*}/
             vector[:comments] << Regexp.last_match(1)
           elsif line =~ /(?:^|.*:)\s*(?:W|WaveformTable)\s+(.*)\s*;/
-            vector[:timeset] = Regexp.last_match(1)
+            vector[:timeset] = OrigenSTIL.unquote(Regexp.last_match(1))
           elsif line =~ /(?:^|.*:)\s*Loop\s+(\d+)(\s|{)/
             vector[:repeat] = Regexp.last_match(1).to_i
           elsif line =~ /(?:^|.*:)\s*(?:V|Vector)\s+{(.*)}/
             Regexp.last_match(1).strip.split(';').each do |assignment|
               assignment = assignment.split(/\s*=\s*/)
-              vector[:pindata][assignment[0]] = assignment[1]
+              vector[:pindata][OrigenSTIL.unquote(assignment[0])] = assignment[1]
             end
             yield vector
             vector = { timeset: nil, comments: [], pindata: {}, repeat: 1 }
           end
         else
-          open = true if line =~ /^\s*Pattern #{pattern_name}\s*{/
+          open = true if line =~ /^\s*Pattern "?'?#{pattern_name}"?'?\s*{/
         end
       end
     end
