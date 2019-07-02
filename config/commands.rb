@@ -33,11 +33,11 @@ when "tags"
   # control flowing back to Origen
   exit 0
 
-## Example of how to make a command to run unit tests, this simply invokes RSpec on
-## the spec directory
-#when "specs"
-#  require "rspec"
-#  exit RSpec::Core::Runner.run(['spec'])
+# Example of how to make a command to run unit tests, this simply invokes RSpec on
+# the spec directory
+when "specs"
+  require "rspec"
+  exit RSpec::Core::Runner.run(['spec'])
 
 ## Example of how to make a command to run diff-based tests
 #when "examples", "test"
@@ -79,8 +79,8 @@ else
   @application_commands = <<-EOT
  tags         Build a tags file for this app
  build        Build/compile the latest grammar file(s)
+ specs        Run the specs (tests), -c will enable coverage
   EOT
-# specs        Run the specs (tests), -c will enable coverage
 # examples     Run the examples (tests), -c will enable coverage
 # test         Run both specs and examples, -c will enable coverage
 end 

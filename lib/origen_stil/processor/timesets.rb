@@ -11,9 +11,14 @@ module OrigenSTIL
 
       def on_waveform_table(node)
         name = node.to_a[0]
-        # Pass on resolving the period for now, could involve parameter cross referencing
-        period = node.find(:period)
         @timesets[name] = {}
+        if period = node.find(:period)
+          @timesets[name][:period_in_ns] = process_all(period.children).first * 1000000000
+        end
+      end
+
+      def on_time_expr(node)
+        Expression.new.run(node)
       end
     end
   end

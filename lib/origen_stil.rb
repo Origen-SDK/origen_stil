@@ -22,11 +22,12 @@ module OrigenSTIL
   end
 
   module Processor
-    autoload :Base,      'origen_stil/processor/base'
-    autoload :Pins,      'origen_stil/processor/pins'
-    autoload :PinGroups, 'origen_stil/processor/pin_groups'
-    autoload :Pattern,   'origen_stil/processor/pattern'
-    autoload :Timesets,  'origen_stil/processor/timesets'
+    autoload :Base,       'origen_stil/processor/base'
+    autoload :Pins,       'origen_stil/processor/pins'
+    autoload :PinGroups,  'origen_stil/processor/pin_groups'
+    autoload :Pattern,    'origen_stil/processor/pattern'
+    autoload :Timesets,   'origen_stil/processor/timesets'
+    autoload :Expression, 'origen_stil/processor/expression'
   end
 
   autoload :Pattern, 'origen_stil/pattern'

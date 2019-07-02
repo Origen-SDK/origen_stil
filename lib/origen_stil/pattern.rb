@@ -15,7 +15,7 @@ module OrigenSTIL
       Processor::Pattern.new.run(ast) do |pattern_name|
         each_vector(pattern_name, options) do |vector|
           if options[:set_timesets] && vector[:timeset] && vector[:timeset] != timeset
-            tester.set_timeset(vector[:timeset], timesets[vector[:timeset]][:period] || 0)
+            tester.set_timeset(vector[:timeset], timesets[vector[:timeset]][:period_in_ns])
             timeset = vector[:timeset]
           end
           vector[:comments].each { |comment| cc comment }
