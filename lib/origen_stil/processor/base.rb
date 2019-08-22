@@ -1,3 +1,4 @@
+require 'ast'
 module OrigenSTIL
   module Processor
     class Base

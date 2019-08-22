@@ -1,0 +1,77 @@
+# ***************************************************************************
+# GENERATED:
+#   Time:    22-Aug-2019 03:21AM
+#   By:      Stephen McGinty
+#   Mode:    debug
+#   Command: origen g example3 -t default.rb -e v93k.rb
+# ***************************************************************************
+# ENVIRONMENT:
+#   Application
+#     Source:    https://github.com/Origen-SDK/origen_stil.git
+#     Version:   0.2.1
+#     Branch:    master(e4c667b1637) (+local edits)
+#   Origen
+#     Source:    https://github.com/Origen-SDK/origen
+#     Version:   0.52.4
+#   Plugins
+#     origen_doc_helpers:       0.8.2
+#     origen_testers:           0.41.0
+# ***************************************************************************
+FORMAT A0 A1 A2 A3 B0 B1 B2 B3;
+#                                                   A A A A B B B B
+#                                                   0 1 2 3 0 1 2 3
+# blah blah 1 
+# blah blah 1 
+# blah blah 1 
+# blah blah 1 
+R1                       func                       0 1 1 0 1 1 0 1 # ;
+R1                       func                       0 0 0 0 H H H H # ;
+R1                       func                       0 0 0 0 H H H H # ;
+R1                       func                       0 0 0 0 H H H H # ;
+R1                       func                       0 0 0 0 H H H H # ;
+R1                       func                       0 0 0 0 H H H H # ;
+R1                       func                       0 0 0 0 H H H H # ;
+R1                       func                       0 0 0 0 H H H H # ;
+R1                       func                       0 0 0 0 H H H H # ;
+R1                       func                       0 0 0 0 H H H H # ;
+R1                       func                       0 0 0 0 H H H H # ;
+SQPG LBGN 5;
+R1                       func                       1 0 1 0 H L H L # ;
+R1                       func                       0 1 0 1 0 H L H # ;
+SQPG LEND;
+R1                       func                       0 1 1 1 X X X X # ;
+R1                       func                       0 1 1 1 X X X X # ;
+R1                       func                       0 1 1 1 X X X X # ;
+R1                       func                       0 1 1 1 X X X X # ;
+R1                       func                       0 1 1 1 X X X X # ;
+R1                       func                       0 1 1 1 X X X X # ;
+R1                       func                       0 1 1 1 X X X X # ;
+R1                       func                       0 1 1 1 X X X X # ;
+R1                       func                       0 1 1 1 X X X X # ;
+R1                       func                       0 1 1 1 X X X X # ;
+R1                       func                       0 1 1 1 X X X X # ;
+R1                       func                       0 1 1 1 X X X X # ;
+R1                       func                       0 1 1 1 X X X X # ;
+R1                       func                       0 1 1 1 X X X X # ;
+R1                       func                       0 1 1 1 X X X X # ;
+R1                       func                       0 1 1 1 X X X X # ;
+R1                       func                       0 1 1 1 X X X X # ;
+R1                       func                       0 1 1 1 X X X X # ;
+R1                       func                       0 1 1 1 X X X X # ;
+R1                       func                       0 1 1 1 X X X X # ;
+# blah blah 1 
+R1                       func                       0 0 0 0 L L L L # ;
+# Test a nested loop 
+SQPG LBGN 5;
+R1                       func                       1 0 1 0 H L H L # ;
+R1                       func                       0 1 0 1 0 H L H # ;
+SQPG LBGN 10;
+R1                       func                       0 0 0 0 H H H H # ;
+R1                       func                       1 1 1 1 L L L L # ;
+SQPG LEND;
+SQPG LEND;
+R1                       func                       0 1 0 1 L L L L # ;
+# ######################################################################
+# ## Pattern complete
+# ######################################################################
+SQPG STOP;

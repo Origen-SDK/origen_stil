@@ -7954,7 +7954,7 @@ module OrigenSTIL
 
       module Name2
         def to_ast
-          text_value
+          n :name, text_value
         end
       end
 
