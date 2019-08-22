@@ -20,6 +20,7 @@ END
 
   it 'can extract a simple timeset period' do
     t = simple_timing_with_period('100ns')
+    debugger
     t["Waveset1"][:period_in_ns].should == 100
   end
 

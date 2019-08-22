@@ -11,30 +11,30 @@ module OrigenSTIL
         val = node.find(:value).value
         if p = node.find(:prefix)
           case p.value
-          when "E"
-            val = val * 1000000000000000000
-          when "P"
-            val = val * 1000000000000000
-          when "T"
-            val = val * 1000000000000
-          when "G"
-            val = val * 1000000000
-          when "M"
-            val = val * 1000000
-          when "k"
+          when 'E'
+            val = val * 1_000_000_000_000_000_000
+          when 'P'
+            val = val * 1_000_000_000_000_000
+          when 'T'
+            val = val * 1_000_000_000_000
+          when 'G'
+            val = val * 1_000_000_000
+          when 'M'
+            val = val * 1_000_000
+          when 'k'
             val = val * 1000
-          when "m"
+          when 'm'
             val = val / 1000.0
-          when "u"
-            val = val / 1000000.0
-          when "n"
-            val = val / 1000000000.0
-          when "p"
-            val = val / 1000000000000.0
-          when "f"
-            val = val / 1000000000000000.0
-          when "a"
-            val = val / 1000000000000000000.0
+          when 'u'
+            val = val / 1_000_000.0
+          when 'n'
+            val = val / 1_000_000_000.0
+          when 'p'
+            val = val / 1_000_000_000_000.0
+          when 'f'
+            val = val / 1_000_000_000_000_000.0
+          when 'a'
+            val = val / 1_000_000_000_000_000_000.0
           else
             fail "Unknown number prefix #{p.value}"
           end

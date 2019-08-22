@@ -12,6 +12,7 @@ gem 'origen_doc_helpers'
 #gem 'ruby-debug-ide'
 #gem 'debase'
 gem 'nokogiri', '1.7.2'  # Easier to run in NXP env
+gem 'origen_testers'
 
 # Specify your gem's runtime dependencies in origen_stil.gemspec
 # THIS LINE SHOULD BE LEFT AT THE END

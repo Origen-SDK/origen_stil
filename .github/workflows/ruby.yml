@@ -1,0 +1,29 @@
+name: Ruby
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Ruby 2.3
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.3.x
+    - name: Verify app can boot
+      run: |
+        gem install bundler -v '<2'
+        bundle install --jobs 4 --retry 3
+        bundle exec origen -v
+    - name: Run tests
+      run: |
+        bundle exec origen test        
+    - name: Verify web site can build
+      run: |
+        bundle exec origen web compile --no-serve
+    - name: Lint check
+      run: |
+        bundle exec origen lint --no-correct

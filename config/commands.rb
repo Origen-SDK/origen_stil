@@ -39,36 +39,33 @@ when "specs"
   require "rspec"
   exit RSpec::Core::Runner.run(['spec'])
 
-## Example of how to make a command to run diff-based tests
-#when "examples", "test"
-#  Origen.load_application
-#  status = 0
-#
-#  # Compiler tests
-#  ARGV = %w(templates/example.txt.erb -t debug -r approved)
-#  load "origen/commands/compile.rb"
-#  # Pattern generator tests
-#  #ARGV = %w(some_pattern -t debug -r approved)
-#  #load "#{Origen.top}/lib/origen/commands/generate.rb"
-#
-#  if Origen.app.stats.changed_files == 0 &&
-#     Origen.app.stats.new_files == 0 &&
-#     Origen.app.stats.changed_patterns == 0 &&
-#     Origen.app.stats.new_patterns == 0
-#
-#    Origen.app.stats.report_pass
-#  else
-#    Origen.app.stats.report_fail
-#    status = 1
-#  end
-#  puts
-#  if @command == "test"
-#    Origen.app.unload_target!
-#    require "rspec"
-#    result = RSpec::Core::Runner.run(['spec'])
-#    status = status == 1 ? 1 : result
-#  end
-#  exit status  # Exit with a 1 on the event of a failure per std unix result codes
+# Example of how to make a command to run diff-based tests
+when "examples", "test"
+  Origen.load_application
+  status = 0
+
+  # Pattern generator tests
+  ARGV = %w(example3 -r approved -e v93k)
+  load "#{Origen.top}/lib/origen/commands/generate.rb"
+
+  if Origen.app.stats.changed_files == 0 &&
+     Origen.app.stats.new_files == 0 &&
+     Origen.app.stats.changed_patterns == 0 &&
+     Origen.app.stats.new_patterns == 0
+
+    Origen.app.stats.report_pass
+  else
+    Origen.app.stats.report_fail
+    status = 1
+  end
+  puts
+  if @command == "test"
+    Origen.app.unload_target!
+    require "rspec"
+    result = RSpec::Core::Runner.run(['spec'])
+    status = status == 1 ? 1 : result
+  end
+  exit status  # Exit with a 1 on the event of a failure per std unix result codes
 
 # Always leave an else clause to allow control to fall back through to the
 # Origen command handler.
@@ -80,7 +77,7 @@ else
  tags         Build a tags file for this app
  build        Build/compile the latest grammar file(s)
  specs        Run the specs (tests), -c will enable coverage
+ examples     Run the examples (tests), -c will enable coverage
+ test         Run both specs and examples, -c will enable coverage
   EOT
-# examples     Run the examples (tests), -c will enable coverage
-# test         Run both specs and examples, -c will enable coverage
 end 

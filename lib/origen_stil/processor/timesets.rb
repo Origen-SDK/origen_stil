@@ -11,9 +11,10 @@ module OrigenSTIL
 
       def on_waveform_table(node)
         name = node.to_a[0]
+        name = name.value if name.try(:type) == :name
         @timesets[name] = {}
         if period = node.find(:period)
-          @timesets[name][:period_in_ns] = process_all(period.children).first * 1000000000
+          @timesets[name][:period_in_ns] = process_all(period.children).first * 1_000_000_000
         end
       end
 
