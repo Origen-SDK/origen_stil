@@ -18,7 +18,7 @@ jobs:
         gem install bundler -v '<2'
         bundle install --jobs 4 --retry 3
         bundle exec origen -v
-        bundle exec origen test
+        ./lbin/origen test
     - name: Run tests
       run: |
         bundle exec origen test        
