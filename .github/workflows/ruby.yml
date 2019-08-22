@@ -16,6 +16,7 @@ jobs:
     - name: Verify app can boot
       run: |
         gem install bundler -v '<2'
+        bundle install --jobs 4 --retry 3
         ./lbin/origen -v
     - name: Run tests
       run: |
