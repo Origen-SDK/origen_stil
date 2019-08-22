@@ -1,6 +1,6 @@
 name: Ruby
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
@@ -15,7 +15,7 @@ jobs:
         ruby-version: 2.3.x
     - name: Verify app can boot
       run: |
-        gem install bundler -v < '<2'
+        gem install bundler < '<2'
         bundle install --jobs 4 --retry 3
         bundle exec origen -v
     - name: Run tests
