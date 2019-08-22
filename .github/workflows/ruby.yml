@@ -18,10 +18,13 @@ jobs:
         gem install bundler -v '<2'
         bundle install --jobs 4 --retry 3
         bundle exec origen -v
-        ./lbin/origen test
-    - name: Run tests
+        ./lbin/origen -v
+    - name: Run specs
       run: |
-        bundle exec origen test        
+        bundle exec origen specs -c      
+    - name: Run examples
+      run: |
+        bundle exec origen examples -c     
     - name: Verify web site can build
       run: |
         bundle exec origen web compile --no-serve
