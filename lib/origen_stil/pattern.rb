@@ -189,7 +189,7 @@ module OrigenSTIL
         if @exec_options[:set_timesets]
           timeset = OrigenSTIL.unquote(Regexp.last_match(1))
           if timeset != @current_timeset
-            tester.set_timeset(timeset, timesets[timeset][:period] || 0)
+            tester.set_timeset(timeset, timesets[timeset][:period_in_ns])
             @current_timeset = timeset
           end
         end
