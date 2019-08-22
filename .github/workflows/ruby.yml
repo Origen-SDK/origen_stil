@@ -19,12 +19,9 @@ jobs:
         bundle install --jobs 4 --retry 3
         bundle exec origen -v
         ./lbin/origen -v
-    - name: Run specs
+    - name: Run tests
       run: |
-        bundle exec origen specs -c      
-    - name: Run examples
-      run: |
-        bundle exec origen examples -c     
+        bundle exec origen test -c   
     - name: Verify web site can build
       run: |
         bundle exec origen web compile --no-serve
