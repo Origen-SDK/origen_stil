@@ -24,8 +24,9 @@ SignalGroups {
   b0_pin = B0;
   abus_pins = 'A0+A1+A2+A3+A4+A5+A6+A7';
   bbus_pins = 'B0+B1+(B2+B3+B4)+B5+B6+B7';
-  bbus_odd = 'bbus_pins-B0-B2-B3-B4';
+  //bbus_odd = 'bbus_pins-B0-B2-B3-B4';
   xbus = 'DIR+OE_' { Base Hex wW; Alignment LSB; }
+  abus_pins_alias = 'abus_pins';
 }
 
 // Example of a SignalGroups block for domain "quality"

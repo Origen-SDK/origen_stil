@@ -254,7 +254,7 @@ module OrigenSTIL
           elements[1]
         end
 
-        def sigref_expression
+        def expression_subset
           elements[2]
         end
 
@@ -311,7 +311,7 @@ module OrigenSTIL
             r5 = _nt_s
             s3 << r5
             if r5
-              r6 = _nt_sigref_expression
+              r6 = _nt_expression_subset
               s3 << r6
               if r6
                 r7 = _nt_s
@@ -352,6 +352,50 @@ module OrigenSTIL
         r0
       end
 
+      def _nt_expression_subset
+        start_index = index
+        if node_cache[:expression_subset].has_key?(index)
+          cached = node_cache[:expression_subset][index]
+          if cached
+            node_cache[:expression_subset][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+            @index = cached.interval.end
+          end
+          return cached
+        end
+
+        i0 = index
+        r1 = _nt_add
+        if r1
+          r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
+          r0 = r1
+        else
+          r2 = _nt_subtract
+          if r2
+            r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
+            r0 = r2
+          else
+            r3 = _nt_name
+            if r3
+              r3 = SyntaxNode.new(input, (index-1)...index) if r3 == true
+              r0 = r3
+            else
+              r4 = _nt_paren_expression
+              if r4
+                r4 = SyntaxNode.new(input, (index-1)...index) if r4 == true
+                r0 = r4
+              else
+                @index = i0
+                r0 = nil
+              end
+            end
+          end
+        end
+
+        node_cache[:expression_subset][start_index] = r0
+
+        r0
+      end
+
       def _nt_expression
         start_index = index
         if node_cache[:expression].has_key?(index)
@@ -364,141 +408,48 @@ module OrigenSTIL
         end
 
         i0 = index
-        r1 = _nt_sigref_expression
+        r1 = _nt_add
         if r1
           r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
           r0 = r1
         else
-          r2 = _nt_time_expression
+          r2 = _nt_subtract
           if r2
             r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
             r0 = r2
           else
-            @index = i0
-            r0 = nil
-          end
-        end
-
-        node_cache[:expression][start_index] = r0
-
-        r0
-      end
-
-      def _nt_sigref_expression
-        start_index = index
-        if node_cache[:sigref_expression].has_key?(index)
-          cached = node_cache[:sigref_expression][index]
-          if cached
-            node_cache[:sigref_expression][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
-            @index = cached.interval.end
-          end
-          return cached
-        end
-
-        s0, i0 = [], index
-        loop do
-          i1 = index
-          r2 = _nt_add
-          if r2
-            r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
-            r1 = r2
-          else
-            r3 = _nt_subtract
+            r3 = _nt_multiply
             if r3
               r3 = SyntaxNode.new(input, (index-1)...index) if r3 == true
-              r1 = r3
+              r0 = r3
             else
-              r4 = _nt_name
+              r4 = _nt_divide
               if r4
                 r4 = SyntaxNode.new(input, (index-1)...index) if r4 == true
-                r1 = r4
+                r0 = r4
               else
-                r5 = _nt_paren_expression
+                r5 = _nt_number_with_unit
                 if r5
                   r5 = SyntaxNode.new(input, (index-1)...index) if r5 == true
-                  r1 = r5
+                  r0 = r5
                 else
-                  @index = i1
-                  r1 = nil
-                end
-              end
-            end
-          end
-          if r1
-            s0 << r1
-          else
-            break
-          end
-        end
-        if s0.empty?
-          @index = i0
-          r0 = nil
-        else
-          r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
-        end
-
-        node_cache[:sigref_expression][start_index] = r0
-
-        r0
-      end
-
-      def _nt_time_expression
-        start_index = index
-        if node_cache[:time_expression].has_key?(index)
-          cached = node_cache[:time_expression][index]
-          if cached
-            node_cache[:time_expression][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
-            @index = cached.interval.end
-          end
-          return cached
-        end
-
-        s0, i0 = [], index
-        loop do
-          i1 = index
-          r2 = _nt_add
-          if r2
-            r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
-            r1 = r2
-          else
-            r3 = _nt_subtract
-            if r3
-              r3 = SyntaxNode.new(input, (index-1)...index) if r3 == true
-              r1 = r3
-            else
-              r4 = _nt_multiply
-              if r4
-                r4 = SyntaxNode.new(input, (index-1)...index) if r4 == true
-                r1 = r4
-              else
-                r5 = _nt_divide
-                if r5
-                  r5 = SyntaxNode.new(input, (index-1)...index) if r5 == true
-                  r1 = r5
-                else
-                  r6 = _nt_number_with_unit
+                  r6 = _nt_number
                   if r6
                     r6 = SyntaxNode.new(input, (index-1)...index) if r6 == true
-                    r1 = r6
+                    r0 = r6
                   else
-                    r7 = _nt_number
+                    r7 = _nt_name
                     if r7
                       r7 = SyntaxNode.new(input, (index-1)...index) if r7 == true
-                      r1 = r7
+                      r0 = r7
                     else
-                      r8 = _nt_name
+                      r8 = _nt_paren_expression
                       if r8
                         r8 = SyntaxNode.new(input, (index-1)...index) if r8 == true
-                        r1 = r8
+                        r0 = r8
                       else
-                        r9 = _nt_paren_expression
-                        if r9
-                          r9 = SyntaxNode.new(input, (index-1)...index) if r9 == true
-                          r1 = r9
-                        else
-                          @index = i1
-                          r1 = nil
-                        end
+                        @index = i0
+                        r0 = nil
                       end
                     end
                   end
@@ -506,20 +457,9 @@ module OrigenSTIL
               end
             end
           end
-          if r1
-            s0 << r1
-          else
-            break
-          end
-        end
-        if s0.empty?
-          @index = i0
-          r0 = nil
-        else
-          r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
         end
 
-        node_cache[:time_expression][start_index] = r0
+        node_cache[:expression][start_index] = r0
 
         r0
       end
@@ -946,7 +886,7 @@ module OrigenSTIL
           elements[1]
         end
 
-        def time_expression
+        def expression
           elements[2]
         end
 
@@ -986,7 +926,7 @@ module OrigenSTIL
           r2 = _nt_s
           s0 << r2
           if r2
-            r3 = _nt_time_expression
+            r3 = _nt_expression
             s0 << r3
             if r3
               r4 = _nt_s
@@ -7954,7 +7894,7 @@ module OrigenSTIL
 
       module Name2
         def to_ast
-          text_value
+          n :name, text_value
         end
       end
 
@@ -9032,6 +8972,16 @@ module OrigenSTIL
         end
       end
 
+      module Number3
+        def to_ast
+          if text_value.to_f == text_value.to_i
+            text_value.to_i
+          else
+            text_value.to_f
+          end
+        end
+      end
+
       def _nt_number
         start_index = index
         if node_cache[:number].has_key?(index)
@@ -9048,6 +8998,8 @@ module OrigenSTIL
         if r1
           r1 = SyntaxNode.new(input, (index-1)...index) if r1 == true
           r0 = r1
+          r0.extend(Number3)
+          r0.extend(Number3)
         else
           i2, s2 = index, []
           r3 = _nt_signed_integer
@@ -9076,6 +9028,8 @@ module OrigenSTIL
           if r2
             r2 = SyntaxNode.new(input, (index-1)...index) if r2 == true
             r0 = r2
+            r0.extend(Number3)
+            r0.extend(Number3)
           else
             i6, s6 = index, []
             r7 = _nt_signed_integer
@@ -9104,6 +9058,8 @@ module OrigenSTIL
             if r6
               r6 = SyntaxNode.new(input, (index-1)...index) if r6 == true
               r0 = r6
+              r0.extend(Number3)
+              r0.extend(Number3)
             else
               i10, s10 = index, []
               r11 = _nt_signed_integer
@@ -9146,6 +9102,8 @@ module OrigenSTIL
               if r10
                 r10 = SyntaxNode.new(input, (index-1)...index) if r10 == true
                 r0 = r10
+                r0.extend(Number3)
+                r0.extend(Number3)
               else
                 @index = i0
                 r0 = nil

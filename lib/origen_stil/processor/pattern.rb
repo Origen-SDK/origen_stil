@@ -19,6 +19,7 @@ module OrigenSTIL
 
       def on_pattern_burst(node)
         name, pat_list = *node
+        name = name.value if name.try(:type) == :name
         if pat_list
           @bursts[name] = []
           @current_burst = @bursts[name]
@@ -27,7 +28,9 @@ module OrigenSTIL
       end
 
       def on_pat_list_item(node)
-        @current_burst << node.to_a[0]
+        name = node.to_a[0]
+        name = name.value if name.try(:type) == :name
+        @current_burst << name
       end
     end
   end

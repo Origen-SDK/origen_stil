@@ -2,6 +2,17 @@ require 'spec_helper'
 
 describe 'The STIL parser' do
 
+  class StilTestDUT
+    include Origen::TopLevel
+  end
+
+  before :each do
+    Origen.target.temporary = -> do
+      StilTestDUT.new
+    end
+    Origen.load_target
+  end
+
   it 'can parse example 1' do
     f = "#{Origen.root}/examples/example1.stil"
     ast = OrigenSTIL::Pattern.new(f).ast
@@ -12,59 +23,22 @@ describe 'The STIL parser' do
     ast.find(:signals).find_all(:signal).size.should == 18
   end
 
-  it 'can yield vector lines' do
+  it 'handles pin group expressions' do
     f = "#{Origen.root}/examples/example1.stil"
-    f = OrigenSTIL::Pattern.new(f)
-    vectors = 0
-    f.each_vector_with_index("blah") do |vec, i|
-      vectors += 1
-      vec[:pindata]["ALL"].should == "0110110110110110110111011"
-      if i == 0
-        vec[:timeset].should == "wft1"
-      else
-        vec[:timeset].should == nil
-      end
-      if i == 0
-        vec[:comments].size.should == 4
-      elsif i == 3
-        vec[:comments].size.should == 1
-      else
-        vec[:comments].size.should == 0
-      end
-      if i == 1
-        vec[:repeat].should == 10
-      else
-        vec[:repeat].should == 1
-      end
-    end
-    vectors.should == 5
+    pat = OrigenSTIL::Pattern.new(f)
+    pat.add_pins
+    dut.pins(:a0_pin).size.should == 1
+    dut.pins(:b0_pin).size.should == 1
+    dut.pins(:abus_pins).size.should == 8
+    dut.pins(:bbus_pins).size.should == 8
+    #dut.pins(:bbus_odd).size.should == 4
+    dut.pins(:xbus).size.should == 2
   end
 
-  it 'can yield vector lines with quotes' do
-    f = "#{Origen.root}/examples/example2.stil"
-    f = OrigenSTIL::Pattern.new(f)
-    vectors = 0
-    f.each_vector_with_index("blah") do |vec, i|
-      vectors += 1
-      vec[:pindata]["ALL"].should == "0110110110110110110111011"
-      if i == 0
-        vec[:timeset].should == "wft1"
-      else
-        vec[:timeset].should == nil
-      end
-      if i == 0
-        vec[:comments].size.should == 4
-      elsif i == 3
-        vec[:comments].size.should == 1
-      else
-        vec[:comments].size.should == 0
-      end
-      if i == 1
-        vec[:repeat].should == 10
-      else
-        vec[:repeat].should == 1
-      end
-    end
-    vectors.should == 5
+  it 'decomposes nested pin groups' do
+    f = "#{Origen.root}/examples/example1.stil"
+    pat = OrigenSTIL::Pattern.new(f)
+    pat.add_pins
+    dut.pins(:abus_pins_alias).size.should == 8
   end
 end
