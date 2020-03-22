@@ -36,7 +36,7 @@ Here are some of the main known limitations currently:
 * Hexadecimal and decimal pin value assignments within vector blocks are not supported
 * Subtraction within pin group definitions is not supported
 
-The plugin is more useable than the above list might suggest, since many tools which render STIL will themselves omit a constrained subset of the full language.
+The plugin is more useable than the above list might suggest, since many tools which render STIL will themselves emit a constrained subset of the full language.
 However, support for these additional features is being added on an as-needed basis.
 
 Please open an Issue ticket if you find the need for a missing feature, ideally including a STIL snippet showing an example.
