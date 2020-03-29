@@ -117,8 +117,14 @@ module OrigenSTIL
                               r11 = SyntaxNode.new(input, (index-1)...index) if r11 == true
                               r0 = r11
                             else
-                              @index = i0
-                              r0 = nil
+                              r12 = _nt_include_statement
+                              if r12
+                                r12 = SyntaxNode.new(input, (index-1)...index) if r12 == true
+                                r0 = r12
+                              else
+                                @index = i0
+                                r0 = nil
+                              end
                             end
                           end
                         end
@@ -4469,6 +4475,83 @@ module OrigenSTIL
         end
 
         node_cache[:pattern_burst][start_index] = r0
+
+        r0
+      end
+
+      module IncludeStatement0
+        def S
+          elements[1]
+        end
+
+        def nm
+          elements[2]
+        end
+
+        def s
+          elements[3]
+        end
+
+      end
+
+      module IncludeStatement1
+        def to_ast
+         n:include, *elements_to_ast
+        end
+      end
+
+      def _nt_include_statement
+        start_index = index
+        if node_cache[:include_statement].has_key?(index)
+          cached = node_cache[:include_statement][index]
+          if cached
+            node_cache[:include_statement][index] = cached = SyntaxNode.new(input, index...(index + 1)) if cached == true
+            @index = cached.interval.end
+          end
+          return cached
+        end
+
+        i0, s0 = index, []
+        if (match_len = has_terminal?("Include", false, index))
+          r1 = instantiate_node(SyntaxNode,input, index...(index + match_len))
+          @index += match_len
+        else
+          terminal_parse_failure('"Include"')
+          r1 = nil
+        end
+        s0 << r1
+        if r1
+          r2 = _nt_S
+          s0 << r2
+          if r2
+            r3 = _nt_name
+            s0 << r3
+            if r3
+              r4 = _nt_s
+              s0 << r4
+              if r4
+                if (match_len = has_terminal?(";", false, index))
+                  r5 = true
+                  @index += match_len
+                else
+                  terminal_parse_failure('";"')
+                  r5 = nil
+                end
+                s0 << r5
+              end
+            end
+          end
+        end
+        if s0.last
+          r0 = instantiate_node(SyntaxNode,input, i0...index, s0)
+          r0.extend(IncludeStatement0)
+          r0.extend(IncludeStatement1)
+        else
+          @index = i0
+          r0 = nil
+        end
+
+        node_cache[:include_statement][start_index] = r0
 
         r0
       end

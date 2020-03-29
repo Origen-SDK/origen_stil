@@ -27,7 +27,6 @@ module OrigenSTIL
           if open
             # Stop at next pattern or EOF
             break if line =~ /^\s*Pattern/
-
             consume_line(line, i)
           else
             open = true if line =~ /^\s*Pattern "?'?#{pattern_name}"?'?\s*{/

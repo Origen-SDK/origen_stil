@@ -6,8 +6,25 @@ module OrigenSTIL
       # Adds pin groups from the given node to the given model
       def run(node, model, options = {})
         @model = model
+        node.find_all(:include).each do |includes|
+          process(includes)
+        end
         node.find_all(:signal_groups).each do |signal_groups|
           process(signal_groups)
+        end
+      end
+
+      def on_include(node)
+        name, file_name = *node
+        name = name.value if name.try(:type) == :name
+        file = name.gsub('"', '')
+        path = Pathname.new("#{Origen.root}/#{file}")
+        @include_ast = OrigenSTIL::Pattern.new(path).ast
+        unless @include_ast.find_all(:signal_groups).empty?
+          name, expr = *@include_ast
+          @include_ast.find_all(:signal_groups).to_a.each do |group|
+            process_all(group)
+          end
         end
       end
 

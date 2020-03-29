@@ -17,6 +17,14 @@ module OrigenSTIL
         end
       end
 
+      def on_include(node)
+        name, file_name = *node
+        name = name.value if name.try(:type) == :name
+        file = name.gsub('"', '')
+        path = Pathname.new("#{Origen.root}/#{file}")
+        @include_ast = OrigenSTIL::Pattern.new(path).ast
+      end
+
       def on_pattern_burst(node)
         name, pat_list = *node
         name = name.value if name.try(:type) == :name
