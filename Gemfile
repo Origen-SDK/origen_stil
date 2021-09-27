@@ -11,7 +11,7 @@ gem 'origen_doc_helpers'
 # Uncomment these if you want to use a visual debugger (e.g. Visual Studio Code) to debug your app
 #gem 'ruby-debug-ide'
 #gem 'debase'
-gem 'nokogiri', '1.7.2'  # Easier to run in NXP env
+gem 'nokogiri', '1.12.5' # Easier to run in NXP env
 gem 'origen_testers'
 
 # Specify your gem's runtime dependencies in origen_stil.gemspec
